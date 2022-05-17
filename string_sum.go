@@ -36,11 +36,10 @@ func readNumber(input string) (int, int, error) {
 
 	for i, r := range []rune(input) {
 		lastPosition = i
-		if b.Len() == 0 {
-			b.WriteRune(r)
-		} else if r == plus || r == minus {
+		if b.Len() != 0 && (r == plus || r == minus) {
 			break
 		}
+		b.WriteRune(r)
 	}
 	num, err := strconv.ParseInt(b.String(), 10, 32)
 	if err != nil {
@@ -63,7 +62,7 @@ func StringSum(input string) (output string, err error) {
 		if err != nil {
 			return "", fmt.Errorf("StringSum.parseIntCheck: %w", err)
 		}
-		lastPosition = position
+		lastPosition += position
 		operands = append(operands, num)
 	}
 
