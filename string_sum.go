@@ -43,7 +43,7 @@ func readNumber(input string) (int, int, error) {
 	}
 	num, err := strconv.ParseInt(b.String(), 10, 32)
 	if err != nil {
-		err = fmt.Errorf("readNumber: cant parse '%s': %w", b.String(), strconv.NumError)
+		err = fmt.Errorf("readNumber: %w", err)
 	}
 	return int(num), lastPosition, err
 }
