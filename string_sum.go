@@ -41,11 +41,8 @@ func readNumber(input string) (int, int, error) {
 		}
 		b.WriteRune(r)
 	}
-	num, err := strconv.ParseInt(b.String(), 10, 32)
-	if err != nil {
-		err = fmt.Errorf("readNumber: %w", err)
-	}
-	return int(num), lastPosition, err
+	num, err := strconv.Atoi(b.String())
+	return num, lastPosition, err
 }
 
 func StringSum(input string) (output string, err error) {
