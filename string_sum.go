@@ -2,6 +2,9 @@ package string_sum
 
 import (
 	"errors"
+	"fmt"
+	"strconv"
+	"strings"
 )
 
 //use these errors as appropriate, wrapping them with fmt.Errorf function
@@ -22,6 +25,47 @@ var (
 //
 // Use the errors defined above as described, again wrapping into fmt.Errorf
 
+const (
+	plus  = rune('+')
+	minus = rune('-')
+)
+
+func readNumber(input string) (int, int, error) {
+	var lastPosition = 0
+	var b strings.Builder
+
+	for i, r := range []rune(input) {
+		lastPosition = i
+		if b.Len() == 0 {
+			b.WriteRune(r)
+		} else if r == plus || r == minus {
+			break
+		}
+	}
+	num, err := strconv.Atoi(b.String())
+	return num, lastPosition, err
+}
+
 func StringSum(input string) (output string, err error) {
-	return "", nil
+	input = strings.ReplaceAll(input, " ", "")
+	if len(input) == 0 {
+		return "", fmt.Errorf("StringSum: %w", errorEmptyInput)
+	}
+
+	operands := make([]int, 0, 2)
+
+	lastPosition := 0
+	for lastPosition+1 != len(input) {
+		num, position, err := readNumber(input[lastPosition:])
+		if err != nil {
+			return "", fmt.Errorf("StringSum: %w", err)
+		}
+		lastPosition = position
+		operands = append(operands, num)
+	}
+	if len(operands) < 2 || len(operands) > 2 {
+		return "", fmt.Errorf("StringSum: %w", errorNotTwoOperands)
+	}
+
+	return strconv.Itoa(operands[0] + operands[1]), nil
 }
