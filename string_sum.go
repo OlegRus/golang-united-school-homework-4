@@ -42,14 +42,14 @@ func readNumber(input string) (int, int, error) {
 			break
 		}
 	}
-	num, err := strconv.Atoi(b.String())
-	return num, lastPosition, err
+	num, err := strconv.ParseInt(b.String(), 10, 32)
+	return int(num), lastPosition, err
 }
 
 func StringSum(input string) (output string, err error) {
 	input = strings.ReplaceAll(input, " ", "")
 	if len(input) == 0 {
-		return "", fmt.Errorf("StringSum: %w", errorEmptyInput)
+		return "", fmt.Errorf("StringSum.emptyStringCheck: %w", errorEmptyInput)
 	}
 
 	operands := make([]int, 0, 2)
@@ -58,13 +58,14 @@ func StringSum(input string) (output string, err error) {
 	for lastPosition+1 != len(input) {
 		num, position, err := readNumber(input[lastPosition:])
 		if err != nil {
-			return "", fmt.Errorf("StringSum: %w", err)
+			return "", fmt.Errorf("StringSum.parseIntCheck: %w", err)
 		}
 		lastPosition = position
 		operands = append(operands, num)
 	}
+
 	if len(operands) < 2 || len(operands) > 2 {
-		return "", fmt.Errorf("StringSum: %w", errorNotTwoOperands)
+		return "", fmt.Errorf("StringSum.operatorAmountCheck: %w", errorNotTwoOperands)
 	}
 
 	return strconv.Itoa(operands[0] + operands[1]), nil
